@@ -45,6 +45,12 @@
                         Buddy
                     </a>
                 {% endif %}
+
+                {% if oauth_enabled('gitea') %}
+                    <a href="{{ url('auth_gitea_start') }}" class="btn btn-green btn-sm">
+                        {% include 'svg/gitea-icon.svg' %} Gitea
+                    </a>
+                {% endif %}
             </div>
 
             <hr />

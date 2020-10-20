@@ -38,6 +38,7 @@ security:
             guard:
                 authenticators:
                     - Buddy\Repman\Security\LoginFormAuthenticator
+                    - Buddy\Repman\Security\GiteaAuthenticator
                     - Buddy\Repman\Security\GitHubAuthenticator
                     - Buddy\Repman\Security\GitLabAuthenticator
                     - Buddy\Repman\Security\BitbucketAuthenticator

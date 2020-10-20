@@ -30,3 +30,13 @@ knpu_oauth2_client:
             redirect_route: register_buddy_check
             redirect_params: {}
             use_state: true
+        gitea:
+            type: generic
+            provider_class: Buddy\Repman\Service\GiteaApi\GiteaOauthProvider
+            client_id: '%env(OAUTH_GITEA_CLIENT_ID)%'
+            client_secret: '%env(OAUTH_GITEA_CLIENT_SECRET)%'
+            redirect_route: register_gitea_check
+            redirect_params: {}
+            use_state: true
+            provider_options:
+                base: '%env(APP_GITEA_BASE_URL)%'

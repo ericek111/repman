@@ -22,6 +22,7 @@ class OAuthToken
     const TYPE_GITHUB = 'github';
     const TYPE_GITLAB = 'gitlab';
     const TYPE_BITBUCKET = 'bitbucket';
+	const TYPE_GITEA = 'gitea';
 
     /**
      * @ORM\Id

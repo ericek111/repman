@@ -5,15 +5,9 @@ declare(strict_types=1);
 namespace Buddy\Repman\Controller\OAuth;
 
 use Buddy\Repman\Entity\User\OAuthToken;
-use Buddy\Repman\Query\User\Model\Organization;
-use Buddy\Repman\Query\User\UserQuery;
 use Buddy\Repman\Security\Model\User;
-use Buddy\Repman\Security\UserGuardHelper;
-use Buddy\Repman\Service\Config;
 use Buddy\Repman\Service\GiteaApi\GiteaOauthProvider;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Token\AccessToken;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +15,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class GiteaController extends OAuthController
 {
-
     /**
      * @Route("/auth/gitea", name="auth_gitea_start", methods={"GET"})
      */
@@ -49,7 +42,7 @@ final class GiteaController extends OAuthController
 
         return $this->createAndAuthenticateUser(
             OAuthToken::TYPE_GITEA,
-            function () {
+            function (): string {
                 /** @var GiteaOauthProvider $gitea */
                 $gitea = $this->oauth->getClient('gitea')->getOAuth2Provider();
 
@@ -66,8 +59,8 @@ final class GiteaController extends OAuthController
     {
         return $this->storeRepoToken(
             OAuthToken::TYPE_GITEA,
-            fn() => $this->oauth->getClient('gitea')->getAccessToken([
-                'redirect_uri' => $this->generateUrl('package_gitea_check', [], UrlGeneratorInterface::ABSOLUTE_URL)
+            fn () => $this->oauth->getClient('gitea')->getAccessToken([
+                'redirect_uri' => $this->generateUrl('package_gitea_check', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ]),
             'organization_package_new'
         );

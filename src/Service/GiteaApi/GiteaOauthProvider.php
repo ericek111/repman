@@ -16,28 +16,31 @@ use League\OAuth2\Client\Provider\GenericProvider;
 
 class GiteaOauthProvider extends GenericProvider
 {
-
     private string $giteaUrl;
 
     private string $apiRoot;
 
+    /**
+     * @param array<string> $options
+     * @param array<string> $collaborators
+     */
     public function __construct(array $options = [], array $collaborators = [])
     {
-        $this->giteaUrl = $options['base'];
-
-        if (empty($this->giteaUrl)) {
+        if (!isset($options['base'])) {
             throw new \RuntimeException('Gitea\'s base URL is empty.');
         }
 
-        $this->apiRoot = !empty($options['apiRoot']) ? $options['apiRoot'] : ($this->giteaUrl . '/api/v1');
+        $this->giteaUrl = $options['base'];
+
+        $this->apiRoot = $options['apiRoot'] ?? ($this->giteaUrl.'/api/v1');
 
         parent::__construct(array_merge([
             'clientId' => '',
             'clientSecret' => '',
             'redirectUri' => '',
-            'urlAuthorize' => $this->giteaUrl . '/login/oauth/authorize',
-            'urlAccessToken' => $this->giteaUrl . '/login/oauth/access_token',
-            'urlResourceOwnerDetails' => ''
+            'urlAuthorize' => $this->giteaUrl.'/login/oauth/authorize',
+            'urlAccessToken' => $this->giteaUrl.'/login/oauth/access_token',
+            'urlResourceOwnerDetails' => '',
         ], $options), $collaborators);
     }
 
@@ -48,7 +51,7 @@ class GiteaOauthProvider extends GenericProvider
 
     public function getRestPath(string $resource = ''): string
     {
-        return $this->apiRoot . $resource;
+        return $this->apiRoot.$resource;
     }
 
     public function primaryEmail(string $accessToken): string
@@ -66,6 +69,4 @@ class GiteaOauthProvider extends GenericProvider
 
         return $resp['email'];
     }
-
-
 }

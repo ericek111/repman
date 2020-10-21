@@ -13,6 +13,7 @@ namespace Buddy\Repman\Service\GiteaApi;
  */
 
 use League\OAuth2\Client\Provider\GenericProvider;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
 class GiteaOauthProvider extends GenericProvider
 {
@@ -64,7 +65,7 @@ class GiteaOauthProvider extends GenericProvider
 
         $resp = $this->getParsedResponse($request);
         if (!isset($resp['email'])) {
-            throw new \RuntimeException('Invalid response - field `email` missing.');
+            throw new CustomUserMessageAuthenticationException('Invalid response - field `email` missing.');
         }
 
         return $resp['email'];

@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class GiteaAuthenticator extends SocialAuthenticator
@@ -43,15 +42,11 @@ final class GiteaAuthenticator extends SocialAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /* @var AccessToken $credentials */
-        try {
-            /** @var GiteaOauthProvider $gitea */
-            $gitea = $this->clientRegistry->getClient('gitea')->getOAuth2Provider();
+        /** @var AccessToken $credentials */
 
-            $email = $gitea->primaryEmail($credentials->getToken());
-        } catch (\Exception $exception) {
-            throw new CustomUserMessageAuthenticationException($exception->getMessage());
-        }
+        /** @var GiteaOauthProvider $gitea */
+        $gitea = $this->clientRegistry->getClient('gitea')->getOAuth2Provider();
+        $email = $gitea->primaryEmail($credentials->getToken());
 
         return $userProvider->loadUserByUsername($email);
     }
